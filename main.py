@@ -130,10 +130,8 @@ def chat_with_ai(query: ChatQuery):
             f"Knowledge Base Context:\n{context}"
         )
 
-        models = client.models.list()
-        if not models.data:
-            raise Exception("No models available for this API key.")
-        model_id = models.data[0].id
+        # Aapki API key par verified working model id
+        model_id = "qwen/qwen3.6-27b"
 
         chat_completion = client.chat.completions.create(
             model=model_id,
