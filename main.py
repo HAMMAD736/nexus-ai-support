@@ -1,4 +1,4 @@
-# Build Version: v14 - Enterprise 3-Box Interactive Portal Architecture
+# Build Version: v15 - Added Favicon for Professional Branding
 import os
 os.environ["HOME"] = "/tmp"
 
@@ -40,6 +40,8 @@ def serve_frontend():
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nexus Automation - Enterprise Support & Client Portal</title>
+    <!-- Professional SVG Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text x='50' y='68' font-size='55' font-family='Arial, sans-serif' font-weight='bold' fill='white' text-anchor='middle'>N</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
