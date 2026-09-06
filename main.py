@@ -128,7 +128,6 @@ def chat_with_ai(query: ChatQuery):
             f"Knowledge Base Context:\n{context}"
         )
 
-        # Aapki key ka verified working model
         model_id = "qwen/qwen3.6-27b"
 
         chat_completion = client.chat.completions.create(
@@ -138,6 +137,7 @@ def chat_with_ai(query: ChatQuery):
                 {"role": "user", "content": query.question},
             ],
             temperature=0.3,
+            max_tokens=150,
         )
 
         answer = chat_completion.choices[0].message.content
