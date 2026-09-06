@@ -161,7 +161,7 @@
             chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
-                const response = await fetch("http://127.0.0.1:8000/chat", {
+                const response = await fetch("/chat", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ question: question })
@@ -205,7 +205,7 @@
             statusDiv.innerText = "Submitting ticket...";
 
             try {
-                const response = await fetch("http://127.0.0.1:8000/create-ticket", {
+                const response = await fetch("/create-ticket", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ client_name: name, client_email: email, project_details: details })
@@ -237,7 +237,7 @@
             statusDiv.innerText = "Submitting feedback...";
 
             try {
-                const response = await fetch("http://127.0.0.1:8000/submit-feedback", {
+                const response = await fetch("/submit-feedback", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ client_name: name, client_email: email, rating: rating, feedback_message: message })
