@@ -21,13 +21,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serverless ke liye In-Memory ChromaDB client use karein taake disk read-only ka masla hi na ho
 chroma_client = chromadb.EphemeralClient()
 collection = chroma_client.get_or_create_collection(
     name="support_knowledge_base"
 )
 
-# Groq Client Initialization using Environment Variable
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
 
@@ -130,8 +128,7 @@ def chat_with_ai(query: ChatQuery):
             f"Knowledge Base Context:\n{context}"
         )
 
-        # Aapki API key par verified working model id
-        model_id = "qwen/qwen3.6-27b"
+        model_id = "llama-3.1-8b-instant"
 
         chat_completion = client.chat.completions.create(
             model=model_id,
@@ -144,7 +141,6 @@ def chat_with_ai(query: ChatQuery):
 
         answer = chat_completion.choices[0].message.content
 
-        # Safe logging (try-except block so it never crashes if filesystem blocks it)
         try:
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             log_entry = f"[{timestamp}] User: {query.question} | AI: {answer}\n"
