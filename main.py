@@ -128,7 +128,7 @@ def chat_with_ai(query: ChatQuery):
         )
 
         chat_completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="llama-3.1-70b-versatile",  # Yeh wala model name use karein
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": query.question},
