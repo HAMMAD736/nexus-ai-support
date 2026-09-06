@@ -1,4 +1,4 @@
-# Build Version: v6 - Ultra-stable Mixtral Model
+# Build Version: v7 - Auto Fallback Model Switcher
 import os
 os.environ["HOME"] = "/tmp"
 
@@ -104,42 +104,54 @@ def serve_frontend():
 
 @app.post("/chat")
 def chat_with_ai(query: ChatQuery):
-    try:
-        api_key = os.environ.get("GROQ_API_KEY")
-        if not api_key:
-            return {"response": "❌ Error: GROQ_API_KEY is missing in Vercel environment variables."}
-        
-        client = Groq(api_key=api_key)
+    api_key = os.environ.get("GROQ_API_KEY")
+    if not api_key:
+        return {"response": "❌ Error: GROQ_API_KEY is missing in Vercel environment variables."}
+    
+    client = Groq(api_key=api_key)
 
-        knowledge_base = (
-            "Developer Name: Hammad Ahmad. "
-            "Role & Business: Founder of Nexus Automation, Undergraduate Student studying Artificial Intelligence at UET Lahore (third semester). "
-            "Services Offered: Modern Full-Stack Web Development (Core PHP, JavaScript, React, Node.js, Express.js, MongoDB), AI/RAG Integrations, Custom Software Solutions. "
-            "Pricing: Custom-quoted based on project scope, requirements, and technical complexity. "
-            "Timelines: 2 to 4 days for landing pages, 5 to 10 days for e-commerce platforms, 10+ days for complex custom AI systems."
-        )
+    knowledge_base = (
+        "Developer Name: Hammad Ahmad. "
+        "Role & Business: Founder of Nexus Automation, Undergraduate Student studying Artificial Intelligence at UET Lahore (third semester). "
+        "Services Offered: Modern Full-Stack Web Development (Core PHP, JavaScript, React, Node.js, Express.js, MongoDB), AI/RAG Integrations, Custom Software Solutions. "
+        "Pricing: Custom-quoted based on project scope, requirements, and technical complexity. "
+        "Timelines: 2 to 4 days for landing pages, 5 to 10 days for e-commerce platforms, 10+ days for complex custom AI systems."
+    )
 
-        system_prompt = (
-            "You are a helpful, professional customer support AI for Hammad Ahmad (Nexus Automation).\n"
-            "CRITICAL GUARDRAIL:\n"
-            "1. Answer questions strictly based on the Knowledge Base Context provided below.\n"
-            "2. If the user's question is related to Hammad's business or services, but the specific details are NOT present in the database context, do NOT make up answers. Instead, reply precisely with: 'Yeh maloomat mere database mein dastiyab nahi hain, barah-e-karam customer support team se contact karein.'\n"
-            "3. Respond warmly to casual greetings like 'salam', 'hello', etc.\n\n"
-            f"Knowledge Base Context:\n{knowledge_base}"
-        )
+    system_prompt = (
+        "You are a helpful, professional customer support AI for Hammad Ahmad (Nexus Automation).\n"
+        "CRITICAL GUARDRAIL:\n"
+        "1. Answer questions strictly based on the Knowledge Base Context provided below.\n"
+        "2. If the user's question is related to Hammad's business or services, but the specific details are NOT present in the database context, do NOT make up answers. Instead, reply precisely with: 'Yeh maloomat mere database mein dastiyab nahi hain, barah-e-karam customer support team se contact karein.'\n"
+        "3. Respond warmly to casual greetings like 'salam', 'hello', etc.\n\n"
+        f"Knowledge Base Context:\n{knowledge_base}"
+    )
 
-        chat_completion = client.chat.completions.create(
-            model="mixtral-8x7b-32768",  # Permanent stable model
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": query.question},
-            ],
-            temperature=0.3,
-            max_tokens=150,
-        )
+    # List of models to try one by one automatically
+    models_to_try = [
+        "llama-3.3-70b-versatile",
+        "llama-3.1-8b-instant",
+        "mixtral-8x7b-32768",
+        "gemma2-9b-it",
+        "llama3-70b-8192"
+    ]
 
-        answer = chat_completion.choices[0].message.content
-        return {"response": answer}
+    last_error = ""
+    for model_name in models_to_try:
+        try:
+            chat_completion = client.chat.completions.create(
+                model=model_name,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": query.question},
+                ],
+                temperature=0.3,
+                max_tokens=150,
+            )
+            answer = chat_completion.choices[0].message.content
+            return {"response": f"{answer}"}
+        except Exception as e:
+            last_error = str(e)
+            continue  # Agar aik model fail ho toh agle par chale jao
 
-    except Exception as e:
-        return {"response": f"❌ Server Error: {str(e)}"}
+    return {"response": f"❌ All models failed. Last Error: {last_error}"}
