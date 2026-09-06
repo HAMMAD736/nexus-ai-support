@@ -26,8 +26,6 @@ collection = chroma_client.get_or_create_collection(
     name="support_knowledge_base"
 )
 
-client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
-
 
 class DocumentInput(BaseModel):
     doc_id: str
@@ -74,6 +72,14 @@ def add_document(data: DocumentInput):
 @app.post("/chat")
 def chat_with_ai(query: ChatQuery):
     try:
+        api_key = os.environ.get("GROQ_API_KEY")
+        if not api_key:
+            raise HTTPException(
+                status_code=500, detail="GROQ_API_KEY environment variable is missing on Vercel!"
+            )
+        
+        client = Groq(api_key=api_key)
+
         count = collection.count()
         if count == 0:
             collection.upsert(
