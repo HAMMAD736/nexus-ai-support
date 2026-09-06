@@ -127,8 +127,8 @@ def chat_with_ai(query: ChatQuery):
             f"Knowledge Base Context:\n{knowledge_base}"
         )
 
-      chat_completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",  # Yeh active model name use karein
+        chat_completion = client.chat.completions.create(
+            model="llama3-70b-8192",
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": query.question},
