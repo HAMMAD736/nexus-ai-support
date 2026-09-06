@@ -1,10 +1,8 @@
 import os
-import traceback
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import chromadb
 from groq import Groq
 
 app = FastAPI()
@@ -17,16 +15,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Purana line hata kar yeh lagayein:
-chroma_client = chromadb.EphemeralClient()
-collection = chroma_client.get_or_create_collection(name="nexus_knowledge")
-
 class ChatQuery(BaseModel):
     question: str
 
 @app.get("/", response_class=HTMLResponse)
 def serve_frontend():
-    # Yahan index.html ka code direct serve ho raha hai
     html_content = """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,34 +61,6 @@ def serve_frontend():
                     class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition duration-200 shadow-sm">Send</button>
             </div>
         </section>
-        <div class="space-y-6">
-            <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-                <h2 class="font-bold text-gray-800 text-md mb-1 border-b pb-2">📋 Direct Project Ticket</h2>
-                <p class="text-xs text-gray-500 mb-3">Want to hire Hammad? Fill out this form to send a direct notification ticket.</p>
-                <form id="ticket-form" onsubmit="submitTicket(event)" class="space-y-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Your Name</label>
-                        <input type="text" id="ticket-name" required placeholder="e.g. Ali Khan"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Your Email</label>
-                        <input type="email" id="ticket-email" required placeholder="name@example.com"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1">Project Details</label>
-                        <textarea id="ticket-details" required rows="2" placeholder="Describe project or requirements..."
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                    </div>
-                    <button type="submit"
-                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg text-xs font-medium transition duration-200 shadow-sm">
-                        Submit Ticket & Notify
-                    </button>
-                </form>
-                <div id="ticket-status" class="text-xs text-center mt-2 font-medium"></div>
-            </section>
-        </div>
     </main>
     <script>
         async function sendMessage() {
@@ -117,7 +82,7 @@ def serve_frontend():
                 });
                 const data = await response.json();
                 document.getElementById(loadingId).remove();
-                const replyText = data.response || data.detail || "No response received.";
+                const replyText = data.response || "No response received.";
                 const parsedHtml = marked.parse(replyText);
                 chatBox.innerHTML += `<div class="flex items-start"><div class="bg-white border border-gray-200 text-gray-800 rounded-2xl rounded-tl-none px-4 py-3 max-w-[85%] text-sm shadow-sm leading-relaxed space-y-2">${parsedHtml}</div></div>`;
             } catch (error) {
@@ -143,27 +108,22 @@ def chat_with_ai(query: ChatQuery):
         
         client = Groq(api_key=api_key)
 
-        if collection.count() == 0:
-            collection.upsert(
-                ids=["hammad_profile_modern"],
-                documents=[
-                    "Developer Name: Hammad Ahmad (Founder of Nexus Automation, AI Undergraduate at UET Lahore). "
-                    "Services: Modern Full-Stack Web Development, AI/RAG Integrations, Custom Software Solutions. "
-                    "Pricing: Custom-quoted based on scope and complexity. "
-                    "Timelines: 2 to 4 days for landing pages, 5 to 10 days for e-commerce, 10+ days for custom AI systems."
-                ],
-                metadatas=[{"category": "profile"}],
-            )
-
-        all_docs = collection.get()
-        retrieved_docs = all_docs.get("documents", [])
-        context = "\n\n".join(retrieved_docs) if retrieved_docs else "No context."
+        # Knowledge Base context directly in memory
+        knowledge_base = (
+            "Developer Name: Hammad Ahmad. "
+            "Role & Business: Founder of Nexus Automation, Undergraduate Student studying Artificial Intelligence at UET Lahore (third semester). "
+            "Services Offered: Modern Full-Stack Web Development (Core PHP, JavaScript, React, Node.js, Express.js, MongoDB), AI/RAG Integrations, Custom Software Solutions. "
+            "Pricing: Custom-quoted based on project scope, requirements, and technical complexity. "
+            "Timelines: 2 to 4 days for landing pages, 5 to 10 days for e-commerce platforms, 10+ days for complex custom AI systems."
+        )
 
         system_prompt = (
-            "You are a helpful customer support AI for Hammad Ahmad (Nexus Automation).\n"
-            "Strictly answer based on the context below. If details are missing, reply: "
-            "'Yeh maloomat mere database mein dastiyab nahi hain, barah-e-karam customer support team se contact karein.'\n\n"
-            f"Context:\n{context}"
+            "You are a helpful, professional customer support AI for Hammad Ahmad (Nexus Automation).\n"
+            "CRITICAL GUARDRAIL:\n"
+            "1. Answer questions strictly based on the Knowledge Base Context provided below.\n"
+            "2. If the user's question is related to Hammad's business or services, but the specific details are NOT present in the database context, do NOT make up answers. Instead, reply precisely with: 'Yeh maloomat mere database mein dastiyab nahi hain, barah-e-karam customer support team se contact karein.'\n"
+            "3. Respond warmly to casual greetings like 'salam', 'hello', etc.\n\n"
+            f"Knowledge Base Context:\n{knowledge_base}"
         )
 
         chat_completion = client.chat.completions.create(
