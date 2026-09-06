@@ -116,20 +116,20 @@ def chat_with_ai(query: ChatQuery):
         retrieved_docs = all_docs.get("documents", [])
         context = "\n\n".join(retrieved_docs) if retrieved_docs else "No context."
 
-       system_prompt = (
-    "You are a helpful, polite, professional, and welcoming customer support "
-    "AI for Hammad Ahmad (Founder of Nexus Automation, UET Lahore).\n\n"
-    "IMPORTANT GUIDELINES & GUARDRAILS:\n"
-    "1. Strict Context Adherence: Answer questions strictly based on the provided Knowledge Base Context below. "
-    "If a user's question is related to Hammad's business, services, or web/AI development, but the exact details "
-    "are NOT present in the database context, do NOT make up facts. Instead, reply with: "
-    "'Yeh maloomat mere database mein dastiyab nahi hain, barah-e-karam project ticket fill kar ke ya hamari customer support team se contact karein.'\n"
-    "2. Casual & Polite Greetings: Respond warmly to greetings like 'salam', 'hello', or general well-being queries.\n"
-    "3. Formatting: Never use markdown tables. Always use clean bullet points and short paragraphs.\n\n"
-    f"Knowledge Base Context:\n{context}"
-)
+      system_prompt = (
+            "You are a helpful, polite, professional, and welcoming customer support "
+            "AI for Hammad Ahmad (Founder of Nexus Automation, UET Lahore).\n\n"
+            "IMPORTANT GUIDELINES & GUARDRAILS:\n"
+            "1. Strict Context Adherence: Answer questions strictly based on the provided Knowledge Base Context below. "
+            "If a user's question is related to Hammad's business, services, or web/AI development, but the exact details "
+            "are NOT present in the database context, do NOT make up facts. Instead, reply with: "
+            "'Yeh maloomat mere database mein dastiyab nahi hain, barah-e-karam project ticket fill kar ke ya hamari customer support team se contact karein.'\n"
+            "2. Casual & Polite Greetings: Respond warmly to greetings like 'salam', 'hello', or general well-being queries.\n"
+            "3. Formatting: Never use markdown tables. Always use clean bullet points and short paragraphs.\n\n"
+            f"Knowledge Base Context:\n{context}"
+        )
 
-        model_id = "qwen/qwen3.6-27b"
+        model_id = "llama-3.3-70b-versatile"
 
         chat_completion = client.chat.completions.create(
             model=model_id,
