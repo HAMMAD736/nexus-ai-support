@@ -1,4 +1,4 @@
-# Build Version: v11 - Professional Full Dashboard (Chat + Tickets + Feedback)
+# Build Version: v12 - Professional Portal with Primary Working Model
 import os
 os.environ["HOME"] = "/tmp"
 
@@ -285,7 +285,8 @@ def chat_with_ai(query: ChatQuery):
         f"Knowledge Base Context:\n{knowledge_base}"
     )
 
-    models_to_try = ["openai/gpt-oss-120b", "llama-3.3-70b-versatile", "llama-3.1-8b-instant"]
+    # Working model prioritized first
+    models_to_try = ["openai/gpt-oss-120b", "llama-3.3-70b-versatile"]
     for model_name in models_to_try:
         try:
             completion = client.chat.completions.create(
@@ -301,10 +302,8 @@ def chat_with_ai(query: ChatQuery):
 
 @app.post("/ticket")
 def create_ticket(ticket: TicketQuery):
-    # Yahan aap database ya email notification logic laga sakte hain
     return {"status": "success", "message": f"🎫 Ticket successfully generated for {ticket.name}! Support team will contact you shortly via {ticket.email}."}
 
 @app.post("/feedback")
 def submit_feedback(feedback: FeedbackQuery):
-    # Yahan feedback log save ho sakta hai
     return {"status": "success", "message": f"⭐ Thank you for your valuable feedback, {feedback.client_name}! Your rating has been recorded."}
