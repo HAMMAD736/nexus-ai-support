@@ -1,4 +1,4 @@
-# Build Version: v12 - Professional Portal with Primary Working Model
+# Build Version: v13 - Interactive Home Cards & Multi-Tab Hub
 import os
 os.environ["HOME"] = "/tmp"
 
@@ -47,7 +47,7 @@ def serve_frontend():
     <header class="bg-gradient-to-r from-blue-800 via-indigo-900 to-slate-900 text-white shadow-lg py-6 px-8">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
             <div>
-                <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">Nexus Automation</h1>
+                <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight cursor-pointer" onclick="switchTab('home')">Nexus Automation</h1>
                 <p class="text-blue-300 text-sm mt-1">AI-Powered Solutions • Full-Stack Development • Client Hub</p>
             </div>
             <div class="mt-4 md:mt-0 flex items-center gap-3">
@@ -60,15 +60,61 @@ def serve_frontend():
 
     <nav class="bg-white border-b border-gray-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-6 flex space-x-8">
-            <button onclick="switchTab('chat')" id="nav-chat" class="py-4 px-2 border-b-2 border-blue-600 text-blue-600 font-semibold text-sm transition">💬 Live AI Assistant</button>
+            <button onclick="switchTab('home')" id="nav-home" class="py-4 px-2 border-b-2 border-blue-600 text-blue-600 font-semibold text-sm transition">🏠 Home Portal</button>
+            <button onclick="switchTab('chat')" id="nav-chat" class="py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm transition">💬 Live AI Assistant</button>
             <button onclick="switchTab('ticket')" id="nav-ticket" class="py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm transition">🎫 Support Ticket</button>
             <button onclick="switchTab('feedback')" id="nav-feedback" class="py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm transition">⭐ Client Feedback</button>
         </div>
     </nav>
 
     <main class="max-w-7xl mx-auto p-6">
+        <!-- TAB 0: HOME LANDING CARDS -->
+        <div id="tab-home" class="space-y-6">
+            <div class="text-center max-w-2xl mx-auto py-8">
+                <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Welcome to Nexus Automation Portal</h2>
+                <p class="text-gray-600 mt-2 text-sm">Please select a service or tool below to get started with Hammad Ahmad's professional support systems.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <!-- Card 1: AI Chat -->
+                <div onclick="switchTab('chat')" class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md hover:border-blue-500 cursor-pointer transition flex flex-col justify-between group">
+                    <div>
+                        <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-blue-600 group-hover:text-white transition">💬</div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Live AI Assistant</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">Have questions about web development, project timelines, or custom AI integrations? Chat instantly with our RAG Assistant.</p>
+                    </div>
+                    <div class="mt-6 flex items-center text-xs font-semibold text-blue-600">
+                        Launch AI Chat &rarr;
+                    </div>
+                </div>
+
+                <!-- Card 2: Support Ticket -->
+                <div onclick="switchTab('ticket')" class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md hover:border-blue-500 cursor-pointer transition flex flex-col justify-between group">
+                    <div>
+                        <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-indigo-600 group-hover:text-white transition">🎫</div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Customer Support Ticket</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">Facing technical bugs or need dedicated human assistance for your software project? Submit a support ticket securely.</p>
+                    </div>
+                    <div class="mt-6 flex items-center text-xs font-semibold text-indigo-600">
+                        Create Ticket &rarr;
+                    </div>
+                </div>
+
+                <!-- Card 3: Feedback -->
+                <div onclick="switchTab('feedback')" class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md hover:border-blue-500 cursor-pointer transition flex flex-col justify-between group">
+                    <div>
+                        <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-amber-600 group-hover:text-white transition">⭐</div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Client Feedback</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">Share your reviews and ratings about your experience working with Nexus Automation and Hammad's development services.</p>
+                    </div>
+                    <div class="mt-6 flex items-center text-xs font-semibold text-amber-600">
+                        Leave Feedback &rarr;
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- TAB 1: CHAT -->
-        <div id="tab-chat" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div id="tab-chat" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
             <section class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-200 flex flex-col h-[650px]">
                 <div class="p-4 border-b border-gray-100 bg-gray-50/50 rounded-t-2xl flex items-center justify-between">
                     <h2 class="font-bold text-gray-700 flex items-center gap-2">🤖 Hammad's RAG Support Assistant</h2>
@@ -99,7 +145,7 @@ def serve_frontend():
                     </ul>
                 </div>
                 <div class="bg-blue-50 border border-blue-100 p-4 rounded-xl text-xs text-blue-800">
-                    Need immediate human assistance? Drop a support ticket via the tab above.
+                    Need immediate human assistance? Switch to the Support Ticket tab.
                 </div>
             </div>
         </div>
@@ -166,12 +212,16 @@ def serve_frontend():
 
     <script>
         function switchTab(tab) {
-            ['chat', 'ticket', 'feedback'].forEach(t => {
-                document.getElementById('tab-' + t).classList.add('hidden');
-                document.getElementById('nav-' + t).className = "py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm transition";
+            ['home', 'chat', 'ticket', 'feedback'].forEach(t => {
+                const el = document.getElementById('tab-' + t);
+                if(el) el.classList.add('hidden');
+                const navEl = document.getElementById('nav-' + t);
+                if(navEl) navEl.className = "py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm transition";
             });
-            document.getElementById('tab-' + tab).classList.remove('hidden');
-            document.getElementById('nav-' + tab).className = "py-4 px-2 border-b-2 border-blue-600 text-blue-600 font-semibold text-sm transition";
+            const targetTab = document.getElementById('tab-' + tab);
+            if(targetTab) targetTab.classList.remove('hidden');
+            const targetNav = document.getElementById('nav-' + tab);
+            if(targetNav) targetNav.className = "py-4 px-2 border-b-2 border-blue-600 text-blue-600 font-semibold text-sm transition";
         }
 
         async function sendMessage() {
@@ -285,7 +335,6 @@ def chat_with_ai(query: ChatQuery):
         f"Knowledge Base Context:\n{knowledge_base}"
     )
 
-    # Working model prioritized first
     models_to_try = ["openai/gpt-oss-120b", "llama-3.3-70b-versatile"]
     for model_name in models_to_try:
         try:
