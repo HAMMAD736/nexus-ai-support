@@ -1,4 +1,6 @@
 import os
+os.environ["HOME"] = "/tmp"
+
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -108,7 +110,6 @@ def chat_with_ai(query: ChatQuery):
         
         client = Groq(api_key=api_key)
 
-        # Knowledge Base context directly in memory
         knowledge_base = (
             "Developer Name: Hammad Ahmad. "
             "Role & Business: Founder of Nexus Automation, Undergraduate Student studying Artificial Intelligence at UET Lahore (third semester). "

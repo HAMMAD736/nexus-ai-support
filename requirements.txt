@@ -1,7 +1,4 @@
 fastapi
 uvicorn
 pydantic
-chromadb
 groq
-email-validator
-mangum
