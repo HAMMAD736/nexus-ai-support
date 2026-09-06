@@ -167,10 +167,12 @@
                     body: JSON.stringify({ question: question })
                 });
                 const data = await response.json();
+                console.log("API Response:", data);
 
                 document.getElementById(loadingId).remove();
 
-                const parsedHtml = marked.parse(data.response || "No response received.");
+                const replyText = data.response || data.detail || "No response received.";
+                const parsedHtml = marked.parse(replyText);
 
                 chatBox.innerHTML += `
                     <div class="flex items-start">
@@ -179,11 +181,12 @@
                         </div>
                     </div>`;
             } catch (error) {
+                console.error("Chat error:", error);
                 document.getElementById(loadingId).remove();
                 chatBox.innerHTML += `
                     <div class="flex items-start">
                         <div class="bg-red-100 text-red-700 rounded-2xl rounded-tl-none px-4 py-3 text-sm">
-                            Error connecting to server. Please ensure FastAPI is running.
+                            Error connecting to server. Please try again.
                         </div>
                     </div>`;
             }
