@@ -4,3 +4,4 @@ pydantic
 chromadb
 groq
 email-validator
+mangum

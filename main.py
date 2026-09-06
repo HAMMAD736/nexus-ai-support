@@ -21,7 +21,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-chroma_client = chromadb.PersistentClient(path="./chroma_db")
+import os
+import chromadb
+
+# Vercel ke liye /tmp path use karein kyunke root read-only hota hai
+db_path = "/tmp/chroma_db" if os.environ.get("VERCEL") else "./chroma_db"
+chroma_client = chromadb.PersistentClient(path=db_path)
 collection = chroma_client.get_or_create_collection(
     name="support_knowledge_base"
 )
@@ -166,9 +171,9 @@ def chat_with_ai(query: ChatQuery):
 @app.post("/create-ticket")
 def create_support_ticket(ticket: TicketInput):
     try:
-        sender_email = "email"
-        sender_password = "password"
-        receiver_email = "email"
+        sender_email = "hammadahmad736gb@gmail.com"
+        sender_password = "neeikfwoytrmvaag"
+        receiver_email = "hammadahmad736gb@gmail.com"
 
         msg = MIMEMultipart()
         msg["From"] = sender_email
