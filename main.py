@@ -32,7 +32,7 @@ collection = chroma_client.get_or_create_collection(
 )
 
 # Groq Client Initialization
-client = Groq(api_key="GROQ_API_KEY")
+client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
 
 class DocumentInput(BaseModel):
