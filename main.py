@@ -1,4 +1,4 @@
-# Build Version: v13 - Interactive Home Cards & Multi-Tab Hub
+# Build Version: v14 - Enterprise 3-Box Interactive Portal Architecture
 import os
 os.environ["HOME"] = "/tmp"
 
@@ -43,185 +43,207 @@ def serve_frontend():
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
-<body class="bg-gray-100 font-sans text-gray-800">
-    <header class="bg-gradient-to-r from-blue-800 via-indigo-900 to-slate-900 text-white shadow-lg py-6 px-8">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
-            <div>
-                <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight cursor-pointer" onclick="switchTab('home')">Nexus Automation</h1>
-                <p class="text-blue-300 text-sm mt-1">AI-Powered Solutions • Full-Stack Development • Client Hub</p>
-            </div>
-            <div class="mt-4 md:mt-0 flex items-center gap-3">
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 mr-2 animate-pulse"></span> Systems Operational
-                </span>
-            </div>
-        </div>
-    </header>
-
-    <nav class="bg-white border-b border-gray-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-6 flex space-x-8">
-            <button onclick="switchTab('home')" id="nav-home" class="py-4 px-2 border-b-2 border-blue-600 text-blue-600 font-semibold text-sm transition">🏠 Home Portal</button>
-            <button onclick="switchTab('chat')" id="nav-chat" class="py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm transition">💬 Live AI Assistant</button>
-            <button onclick="switchTab('ticket')" id="nav-ticket" class="py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm transition">🎫 Support Ticket</button>
-            <button onclick="switchTab('feedback')" id="nav-feedback" class="py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm transition">⭐ Client Feedback</button>
-        </div>
-    </nav>
-
-    <main class="max-w-7xl mx-auto p-6">
-        <!-- TAB 0: HOME LANDING CARDS -->
-        <div id="tab-home" class="space-y-6">
-            <div class="text-center max-w-2xl mx-auto py-8">
-                <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Welcome to Nexus Automation Portal</h2>
-                <p class="text-gray-600 mt-2 text-sm">Please select a service or tool below to get started with Hammad Ahmad's professional support systems.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-                <!-- Card 1: AI Chat -->
-                <div onclick="switchTab('chat')" class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md hover:border-blue-500 cursor-pointer transition flex flex-col justify-between group">
+<body class="bg-slate-900 font-sans text-gray-100 min-h-screen flex flex-col justify-between">
+    <div>
+        <!-- Top Enterprise Header -->
+        <header class="bg-slate-950 border-b border-slate-800 text-white py-5 px-8 shadow-md">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
+                    <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-bold text-lg shadow-inner">N</div>
                     <div>
-                        <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-blue-600 group-hover:text-white transition">💬</div>
-                        <h3 class="text-lg font-bold text-gray-800 mb-2">Live AI Assistant</h3>
-                        <p class="text-xs text-gray-500 leading-relaxed">Have questions about web development, project timelines, or custom AI integrations? Chat instantly with our RAG Assistant.</p>
-                    </div>
-                    <div class="mt-6 flex items-center text-xs font-semibold text-blue-600">
-                        Launch AI Chat &rarr;
+                        <h1 class="text-xl font-extrabold tracking-tight">Nexus Automation</h1>
+                        <p class="text-xs text-slate-400">AI-Powered Enterprise Solutions & Hub</p>
                     </div>
                 </div>
-
-                <!-- Card 2: Support Ticket -->
-                <div onclick="switchTab('ticket')" class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md hover:border-blue-500 cursor-pointer transition flex flex-col justify-between group">
-                    <div>
-                        <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-indigo-600 group-hover:text-white transition">🎫</div>
-                        <h3 class="text-lg font-bold text-gray-800 mb-2">Customer Support Ticket</h3>
-                        <p class="text-xs text-gray-500 leading-relaxed">Facing technical bugs or need dedicated human assistance for your software project? Submit a support ticket securely.</p>
-                    </div>
-                    <div class="mt-6 flex items-center text-xs font-semibold text-indigo-600">
-                        Create Ticket &rarr;
-                    </div>
-                </div>
-
-                <!-- Card 3: Feedback -->
-                <div onclick="switchTab('feedback')" class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md hover:border-blue-500 cursor-pointer transition flex flex-col justify-between group">
-                    <div>
-                        <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:bg-amber-600 group-hover:text-white transition">⭐</div>
-                        <h3 class="text-lg font-bold text-gray-800 mb-2">Client Feedback</h3>
-                        <p class="text-xs text-gray-500 leading-relaxed">Share your reviews and ratings about your experience working with Nexus Automation and Hammad's development services.</p>
-                    </div>
-                    <div class="mt-6 flex items-center text-xs font-semibold text-amber-600">
-                        Leave Feedback &rarr;
-                    </div>
+                <div class="mt-4 md:mt-0 flex items-center gap-4">
+                    <button onclick="switchTab('home')" id="nav-home" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 text-blue-400 hover:bg-slate-700 transition">Dashboard</button>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 mr-2 animate-pulse"></span> Systems Active
+                    </span>
                 </div>
             </div>
-        </div>
+        </header>
 
-        <!-- TAB 1: CHAT -->
-        <div id="tab-chat" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <section class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-200 flex flex-col h-[650px]">
-                <div class="p-4 border-b border-gray-100 bg-gray-50/50 rounded-t-2xl flex items-center justify-between">
-                    <h2 class="font-bold text-gray-700 flex items-center gap-2">🤖 Hammad's RAG Support Assistant</h2>
-                    <span class="text-xs text-gray-400">Instant AI Responses</span>
+        <!-- Main Workspace Container -->
+        <main class="max-w-7xl mx-auto p-6 md:p-10">
+            
+            <!-- VIEW 0: THREE LARGE PROFESSIONAL ENTERPRISE BOXES -->
+            <div id="tab-home" class="space-y-8">
+                <div class="text-center max-w-3xl mx-auto py-4">
+                    <h2 class="text-3xl md:text-4xl font-black text-white tracking-tight">Welcome to Nexus Client Center</h2>
+                    <p class="text-slate-400 mt-2 text-sm">Select one of the enterprise portals below to interact with our AI systems, open support inquiries, or submit feedback.</p>
                 </div>
-                <div id="chat-box" class="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-50/30">
-                    <div class="flex items-start">
-                        <div class="bg-blue-600 text-white rounded-2xl rounded-tl-none px-4 py-3 max-w-[85%] text-sm shadow-sm leading-relaxed">
-                            Assalamu alaikum! Welcome to Nexus Automation. I am Hammad's AI support guide. How can I assist you with your web development or AI integration project today?
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto pt-4">
+                    <!-- Box 1: AI Assistant -->
+                    <div onclick="switchTab('chat')" class="bg-slate-800/60 border border-slate-700/80 rounded-3xl p-8 hover:border-blue-500 hover:bg-slate-800 cursor-pointer transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl group-hover:bg-blue-500/15 transition"></div>
+                        <div>
+                            <div class="w-14 h-14 bg-blue-600/20 border border-blue-500/30 text-blue-400 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">💬</div>
+                            <h3 class="text-xl font-bold text-white mb-3">Live AI Assistant</h3>
+                            <p class="text-slate-400 text-xs leading-relaxed">Engage with our custom RAG-powered model to get instant answers regarding web development stacks, pricing, and project deliverables.</p>
+                        </div>
+                        <div class="mt-8 flex items-center gap-2 text-xs font-bold text-blue-400 group-hover:translate-x-1 transition-transform">
+                            Launch AI Console &rarr;
+                        </div>
+                    </div>
+
+                    <!-- Box 2: Support Ticket -->
+                    <div onclick="switchTab('ticket')" class="bg-slate-800/60 border border-slate-700/80 rounded-3xl p-8 hover:border-indigo-500 hover:bg-slate-800 cursor-pointer transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl group-hover:bg-indigo-500/15 transition"></div>
+                        <div>
+                            <div class="w-14 h-14 bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">🎫</div>
+                            <h3 class="text-xl font-bold text-white mb-3">Support Ticket Hub</h3>
+                            <p class="text-slate-400 text-xs leading-relaxed">Encountering a bug or require specialized technical intervention? Register a priority support ticket for our engineering team.</p>
+                        </div>
+                        <div class="mt-8 flex items-center gap-2 text-xs font-bold text-indigo-400 group-hover:translate-x-1 transition-transform">
+                            Open Ticket Portal &rarr;
+                        </div>
+                    </div>
+
+                    <!-- Box 3: Feedback Portal -->
+                    <div onclick="switchTab('feedback')" class="bg-slate-800/60 border border-slate-700/80 rounded-3xl p-8 hover:border-amber-500 hover:bg-slate-800 cursor-pointer transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl group-hover:bg-amber-500/15 transition"></div>
+                        <div>
+                            <div class="w-14 h-14 bg-amber-600/20 border border-amber-500/30 text-amber-400 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">⭐</div>
+                            <h3 class="text-xl font-bold text-white mb-3">Client Feedback</h3>
+                            <p class="text-slate-400 text-xs leading-relaxed">Rate your collaboration experience and share constructive reviews regarding our engineering solutions and deliverables.</p>
+                        </div>
+                        <div class="mt-8 flex items-center gap-2 text-xs font-bold text-amber-400 group-hover:translate-x-1 transition-transform">
+                            Submit Review &rarr;
                         </div>
                     </div>
                 </div>
-                <div class="p-4 border-t border-gray-100 bg-white rounded-b-2xl flex gap-2">
-                    <input type="text" id="user-input" placeholder="Ask about services, timelines, or pricing..."
-                        class="flex-1 border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <button onclick="sendMessage()"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl text-sm font-semibold transition shadow-sm">Send</button>
-                </div>
-            </section>
+            </div>
 
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 flex flex-col justify-between">
-                <div>
-                    <h3 class="font-bold text-gray-800 text-lg mb-3">Quick Guidelines</h3>
-                    <ul class="space-y-3 text-sm text-gray-600">
-                        <li class="flex items-start gap-2">✅ <b>Fast Turnaround:</b> Landing pages in 2-4 days.</li>
-                        <li class="flex items-start gap-2">✅ <b>Tech Stack:</b> React, Node.js, PHP, Python & MongoDB.</li>
-                        <li class="flex items-start gap-2">✅ <b>Custom RAG:</b> Tailored AI chatbot solutions for business websites.</li>
-                    </ul>
+            <!-- VIEW 1: CHAT INTERFACE -->
+            <div id="tab-chat" class="hidden max-w-5xl mx-auto">
+                <div class="mb-4 flex items-center justify-between">
+                    <button onclick="switchTab('home')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl transition border border-slate-700">&larr; Back to Dashboard</button>
+                    <span class="text-xs text-slate-400 font-mono">Active Module: AI Support Chat</span>
                 </div>
-                <div class="bg-blue-50 border border-blue-100 p-4 rounded-xl text-xs text-blue-800">
-                    Need immediate human assistance? Switch to the Support Ticket tab.
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <section class="lg:col-span-2 bg-slate-800 rounded-2xl shadow-xl border border-slate-700 flex flex-col h-[600px]">
+                        <div class="p-4 border-b border-slate-700 bg-slate-900/50 rounded-t-2xl flex items-center justify-between">
+                            <h2 class="font-bold text-slate-200 text-sm flex items-center gap-2">🤖 Hammad's RAG Support Assistant</h2>
+                            <span class="text-xs text-emerald-400">Online</span>
+                        </div>
+                        <div id="chat-box" class="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-800/30">
+                            <div class="flex items-start">
+                                <div class="bg-blue-600 text-white rounded-2xl rounded-tl-none px-4 py-3 max-w-[85%] text-sm shadow-sm leading-relaxed">
+                                    Assalamu alaikum! Welcome to Nexus Automation. I am Hammad's AI support guide. How can I assist you with your web development or AI integration project today?
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 border-t border-slate-700 bg-slate-800/80 rounded-b-2xl flex gap-2">
+                            <input type="text" id="user-input" placeholder="Ask about services, timelines, or pricing..."
+                                class="flex-1 bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <button onclick="sendMessage()"
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl text-sm font-semibold transition shadow-sm">Send</button>
+                        </div>
+                    </section>
+
+                    <div class="bg-slate-800 rounded-2xl shadow-xl border border-slate-700 p-6 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-white text-base mb-3">Quick Guidelines</h3>
+                            <ul class="space-y-3 text-xs text-slate-300">
+                                <li class="flex items-start gap-2">✅ <b>Turnaround:</b> Landing pages in 2-4 days.</li>
+                                <li class="flex items-start gap-2">✅ <b>Tech Stack:</b> React, Node, PHP, Python, MongoDB.</li>
+                                <li class="flex items-start gap-2">✅ <b>Custom RAG:</b> Specialized client chat agents.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-blue-950/50 border border-blue-800/50 p-3 rounded-xl text-xs text-blue-300">
+                            Need technical support? Switch back and open a support ticket.
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- TAB 2: TICKET -->
-        <div id="tab-ticket" class="hidden max-w-2xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-            <h2 class="text-xl font-bold text-gray-800 mb-2">Create a Support Ticket</h2>
-            <p class="text-xs text-gray-500 mb-6">Submit your technical issues or project queries directly to Hammad's team.</p>
-            <form id="ticket-form" onsubmit="submitTicket(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Full Name</label>
-                    <input type="text" id="t-name" required class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <!-- VIEW 2: SUPPORT TICKET -->
+            <div id="tab-ticket" class="hidden max-w-2xl mx-auto">
+                <div class="mb-4">
+                    <button onclick="switchTab('home')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl transition border border-slate-700">&larr; Back to Dashboard</button>
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Email Address</label>
-                    <input type="email" id="t-email" required class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <div class="bg-slate-800 rounded-2xl shadow-xl border border-slate-700 p-8">
+                    <h2 class="text-xl font-bold text-white mb-1">Create a Support Ticket</h2>
+                    <p class="text-xs text-slate-400 mb-6">Submit your technical queries directly to Hammad's development desk.</p>
+                    <form id="ticket-form" onsubmit="submitTicket(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Full Name</label>
+                            <input type="text" id="t-name" required class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Email Address</label>
+                            <input type="email" id="t-email" required class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Service Category</label>
+                            <select id="t-service" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                <option>Full-Stack Web Development</option>
+                                <option>AI / RAG Integration</option>
+                                <option>Bug Fixing / Optimization</option>
+                                <option>General Inquiry</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Issue Description</label>
+                            <textarea id="t-msg" rows="4" required class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl text-sm transition shadow-sm">Submit Ticket</button>
+                    </form>
+                    <div id="ticket-response" class="mt-4 hidden p-4 rounded-xl text-sm"></div>
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Service Category</label>
-                    <select id="t-service" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
-                        <option>Full-Stack Web Development</option>
-                        <option>AI / RAG Integration</option>
-                        <option>Bug Fixing / Optimization</option>
-                        <option>General Inquiry</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Issue Description / Details</label>
-                    <textarea id="t-msg" rows="4" required class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
-                </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl text-sm transition shadow-sm">Submit Ticket</button>
-            </form>
-            <div id="ticket-response" class="mt-4 hidden p-4 rounded-xl text-sm"></div>
-        </div>
+            </div>
 
-        <!-- TAB 3: FEEDBACK -->
-        <div id="tab-feedback" class="hidden max-w-2xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-            <h2 class="text-xl font-bold text-gray-800 mb-2">Client Feedback Portal</h2>
-            <p class="text-xs text-gray-500 mb-6">We value your review. Let us know about your experience working with Nexus Automation.</p>
-            <form id="feedback-form" onsubmit="submitFeedback(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Your Name / Company</label>
-                    <input type="text" id="f-name" required class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <!-- VIEW 3: FEEDBACK PORTAL -->
+            <div id="tab-feedback" class="hidden max-w-2xl mx-auto">
+                <div class="mb-4">
+                    <button onclick="switchTab('home')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl transition border border-slate-700">&larr; Back to Dashboard</button>
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Rating (1 to 5 Stars)</label>
-                    <select id="f-rating" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
-                        <option value="5">⭐⭐⭐⭐⭐ (5 - Excellent)</option>
-                        <option value="4">⭐⭐⭐⭐ (4 - Very Good)</option>
-                        <option value="3">⭐⭐⭐ (3 - Good)</option>
-                        <option value="2">⭐⭐ (2 - Fair)</option>
-                        <option value="1">⭐ (1 - Poor)</option>
-                    </select>
+                <div class="bg-slate-800 rounded-2xl shadow-xl border border-slate-700 p-8">
+                    <h2 class="text-xl font-bold text-white mb-1">Client Feedback Portal</h2>
+                    <p class="text-xs text-slate-400 mb-6">Let us know about your experience working with Nexus Automation.</p>
+                    <form id="feedback-form" onsubmit="submitFeedback(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Your Name / Company</label>
+                            <input type="text" id="f-name" required class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Rating</label>
+                            <select id="f-rating" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                <option value="5">⭐⭐⭐⭐⭐ (5 - Excellent)</option>
+                                <option value="4">⭐⭐⭐⭐ (4 - Very Good)</option>
+                                <option value="3">⭐⭐⭐ (3 - Good)</option>
+                                <option value="2">⭐⭐ (2 - Fair)</option>
+                                <option value="1">⭐ (1 - Poor)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Comments & Reviews</label>
+                            <textarea id="f-comments" rows="4" required class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 rounded-xl text-sm transition shadow-sm">Submit Review</button>
+                    </form>
+                    <div id="feedback-response" class="mt-4 hidden p-4 rounded-xl text-sm"></div>
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-700 uppercase mb-1">Your Feedback & Comments</label>
-                    <textarea id="f-comments" rows="4" required class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
-                </div>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl text-sm transition shadow-sm">Submit Feedback</button>
-            </form>
-            <div id="feedback-response" class="mt-4 hidden p-4 rounded-xl text-sm"></div>
-        </div>
-    </main>
+            </div>
+
+        </main>
+    </div>
+
+    <footer class="bg-slate-950 border-t border-slate-800 text-center py-4 text-xs text-slate-500">
+        Nexus Automation &bull; Developed by Hammad Ahmad
+    </footer>
 
     <script>
         function switchTab(tab) {
             ['home', 'chat', 'ticket', 'feedback'].forEach(t => {
                 const el = document.getElementById('tab-' + t);
                 if(el) el.classList.add('hidden');
-                const navEl = document.getElementById('nav-' + t);
-                if(navEl) navEl.className = "py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm transition";
             });
             const targetTab = document.getElementById('tab-' + tab);
             if(targetTab) targetTab.classList.remove('hidden');
-            const targetNav = document.getElementById('nav-' + tab);
-            if(targetNav) targetNav.className = "py-4 px-2 border-b-2 border-blue-600 text-blue-600 font-semibold text-sm transition";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         async function sendMessage() {
@@ -229,11 +251,11 @@ def serve_frontend():
             const chatBox = document.getElementById("chat-box");
             const question = inputField.value.trim();
             if (!question) return;
-            chatBox.innerHTML += `<div class="flex justify-end"><div class="bg-indigo-600 text-white rounded-2xl rounded-tr-none px-4 py-3 max-w-[85%] text-sm shadow-sm leading-relaxed">${question}</div></div>`;
+            chatBox.innerHTML += `<div class="flex justify-end"><div class="bg-blue-600 text-white rounded-2xl rounded-tr-none px-4 py-3 max-w-[85%] text-sm shadow-sm leading-relaxed">${question}</div></div>`;
             inputField.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
             const loadingId = "loading-" + Date.now();
-            chatBox.innerHTML += `<div id="${loadingId}" class="flex items-start"><div class="bg-gray-200 text-gray-600 rounded-2xl rounded-tl-none px-4 py-3 text-sm italic">AI is thinking...</div></div>`;
+            chatBox.innerHTML += `<div id="${loadingId}" class="flex items-start"><div class="bg-slate-700 text-slate-300 rounded-2xl rounded-tl-none px-4 py-3 text-sm italic">AI is thinking...</div></div>`;
             chatBox.scrollTop = chatBox.scrollHeight;
             try {
                 const response = await fetch("/chat", {
@@ -244,12 +266,12 @@ def serve_frontend():
                 const data = await response.json();
                 document.getElementById(loadingId).remove();
                 const replyText = data.response || "No response received.";
-                const modelTag = data.model_used ? `<div class="mt-2 text-[10px] text-indigo-500 font-mono border-t border-gray-100 pt-1">⚡ Model: ${data.model_used}</div>` : '';
+                const modelTag = data.model_used ? `<div class="mt-2 text-[10px] text-blue-400 font-mono border-t border-slate-700 pt-1">⚡ Model: ${data.model_used}</div>` : '';
                 const parsedHtml = marked.parse(replyText);
-                chatBox.innerHTML += `<div class="flex items-start"><div class="bg-white border border-gray-200 text-gray-800 rounded-2xl rounded-tl-none px-4 py-3 max-w-[85%] text-sm shadow-sm leading-relaxed space-y-2">${parsedHtml}${modelTag}</div></div>`;
+                chatBox.innerHTML += `<div class="flex items-start"><div class="bg-slate-900 border border-slate-700 text-slate-100 rounded-2xl rounded-tl-none px-4 py-3 max-w-[85%] text-sm shadow-sm leading-relaxed space-y-2">${parsedHtml}${modelTag}</div></div>`;
             } catch (err) {
                 document.getElementById(loadingId).remove();
-                chatBox.innerHTML += `<div class="flex items-start"><div class="bg-red-100 text-red-700 rounded-2xl rounded-tl-none px-4 py-3 text-sm">Server connection error.</div></div>`;
+                chatBox.innerHTML += `<div class="flex items-start"><div class="bg-red-900/50 text-red-200 rounded-2xl rounded-tl-none px-4 py-3 text-sm">Server connection error.</div></div>`;
             }
             chatBox.scrollTop = chatBox.scrollHeight;
         }
@@ -274,11 +296,11 @@ def serve_frontend():
                     body: JSON.stringify(payload)
                 });
                 const data = await response.json();
-                resDiv.className = "mt-4 p-4 rounded-xl text-sm bg-emerald-50 text-emerald-800 border border-emerald-200";
+                resDiv.className = "mt-4 p-4 rounded-xl text-sm bg-emerald-950 text-emerald-300 border border-emerald-800";
                 resDiv.innerText = data.message;
                 document.getElementById('ticket-form').reset();
             } catch(err) {
-                resDiv.className = "mt-4 p-4 rounded-xl text-sm bg-red-50 text-red-800 border border-red-200";
+                resDiv.className = "mt-4 p-4 rounded-xl text-sm bg-red-950 text-red-300 border border-red-800";
                 resDiv.innerText = "Error submitting ticket.";
             }
             resDiv.classList.remove('hidden');
@@ -299,11 +321,11 @@ def serve_frontend():
                     body: JSON.stringify(payload)
                 });
                 const data = await response.json();
-                resDiv.className = "mt-4 p-4 rounded-xl text-sm bg-emerald-50 text-emerald-800 border border-emerald-200";
+                resDiv.className = "mt-4 p-4 rounded-xl text-sm bg-emerald-950 text-emerald-300 border border-emerald-800";
                 resDiv.innerText = data.message;
                 document.getElementById('feedback-form').reset();
             } catch(err) {
-                resDiv.className = "mt-4 p-4 rounded-xl text-sm bg-red-50 text-red-800 border border-red-200";
+                resDiv.className = "mt-4 p-4 rounded-xl text-sm bg-red-950 text-red-300 border border-red-800";
                 resDiv.innerText = "Error submitting feedback.";
             }
             resDiv.classList.remove('hidden');
