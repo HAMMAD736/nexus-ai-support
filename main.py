@@ -21,9 +21,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-import os
-import chromadb
-
 # Vercel ke liye /tmp path use karein kyunke root read-only hota hai
 db_path = "/tmp/chroma_db" if os.environ.get("VERCEL") else "./chroma_db"
 chroma_client = chromadb.PersistentClient(path=db_path)
@@ -31,7 +28,7 @@ collection = chroma_client.get_or_create_collection(
     name="support_knowledge_base"
 )
 
-# Groq Client Initialization
+# Groq Client Initialization using Environment Variable
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
 
@@ -85,29 +82,29 @@ def chat_with_ai(query: ChatQuery):
             collection.upsert(
                 ids=["hammad_profile_modern"],
                 documents=[
-                    "Developer Name: Hammad Ahmad (Founder of Nexus Automation, AI"
-                    " Undergraduate at UET Lahore). Core Expertise: Modern"
-                    " Full-Stack Web Development, AI/RAG Integrations, and Custom"
-                    " Software Solutions. Services and Tech Stack: AI & RAG"
-                    " Applications (intelligent customer support bots, LLM"
-                    " integrations via Hugging Face and Groq, retrieval-augmented"
-                    " systems using FastAPI, ChromaDB, and Python); Full-Stack"
-                    " Web Development (dynamic web apps, e-commerce platforms,"
-                    " school portals, and verification systems using React,"
-                    " Node.js, Express.js, MongoDB, Core PHP, MySQL, and"
-                    " JavaScript); Modern DevOps & Deployment (containerizing apps"
-                    " using Docker Desktop and deploying on Vercel and"
-                    " InfinityFree); Systems & Security (robust code/scripts in"
-                    " C++ and Python, and web vulnerability testing). Project"
-                    " Delivery Timelines: Landing pages & basic features take 2 to"
-                    " 4 days; Medium web apps & e-commerce stores take 5 to 10"
-                    " days; Advanced custom systems & AI integrations take 10+"
-                    " days depending on project scope. Pricing & Quotation:"
-                    " Custom-quoted based on project scope, complexity, and"
-                    " features. Client Inquiry & Ticketing Policy: If a client"
-                    " wants to hire, place an order, or discuss a project,"
-                    " collect their Name, Email, and Project Details, generate a"
-                    " support ticket, and notify Hammad instantly."
+                    "Developer Name: Hammad Ahmad (Founder of Nexus Automation, AI "
+                    "Undergraduate at UET Lahore). Core Expertise: Modern "
+                    "Full-Stack Web Development, AI/RAG Integrations, and Custom "
+                    "Software Solutions. Services and Tech Stack: AI & RAG "
+                    "Applications (intelligent customer support bots, LLM "
+                    "integrations via Hugging Face and Groq, retrieval-augmented "
+                    "systems using FastAPI, ChromaDB, and Python); Full-Stack "
+                    "Web Development (dynamic web apps, e-commerce platforms, "
+                    "school portals, and verification systems using React, "
+                    "Node.js, Express.js, MongoDB, Core PHP, MySQL, and "
+                    "JavaScript); Modern DevOps & Deployment (containerizing apps "
+                    "using Docker Desktop and deploying on Vercel and "
+                    "InfinityFree); Systems & Security (robust code/scripts in "
+                    "C++ and Python, and web vulnerability testing). Project "
+                    "Delivery Timelines: Landing pages & basic features take 2 to "
+                    "4 days; Medium web apps & e-commerce stores take 5 to 10 "
+                    "days; Advanced custom systems & AI integrations take 10+ "
+                    "days depending on project scope. Pricing & Quotation: "
+                    "Custom-quoted based on project scope, complexity, and "
+                    "features. Client Inquiry & Ticketing Policy: If a client "
+                    "wants to hire, place an order, or discuss a project, "
+                    "collect their Name, Email, and Project Details, generate a "
+                    "support ticket, and notify Hammad instantly."
                 ],
                 metadatas=[{"category": "profile"}],
             )
@@ -134,7 +131,6 @@ def chat_with_ai(query: ChatQuery):
             f"Knowledge Base Context:\n{context}"
         )
 
-        # Automatically fetch available models dynamically for your key
         models = client.models.list()
         if not models.data:
             raise Exception("No models available for this API key.")
@@ -151,7 +147,6 @@ def chat_with_ai(query: ChatQuery):
 
         answer = chat_completion.choices[0].message.content
 
-        # Advanced Logging
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         log_entry = f"[{timestamp}] User: {query.question} | AI: {answer}\n"
         with open("chat_logs.txt", "a", encoding="utf-8") as f:
@@ -171,9 +166,9 @@ def chat_with_ai(query: ChatQuery):
 @app.post("/create-ticket")
 def create_support_ticket(ticket: TicketInput):
     try:
-        sender_email = "hammadahmad736gb@gmail.com"
-        sender_password = "neeikfwoytrmvaag"
-        receiver_email = "hammadahmad736gb@gmail.com"
+        sender_email = os.environ.get("SENDER_EMAIL")
+        sender_password = os.environ.get("SENDER_PASSWORD")
+        receiver_email = os.environ.get("RECEIVER_EMAIL", sender_email)
 
         msg = MIMEMultipart()
         msg["From"] = sender_email
@@ -181,10 +176,9 @@ def create_support_ticket(ticket: TicketInput):
         msg["Subject"] = f"🚨 New Project Ticket from {ticket.client_name}"
 
         body = (
-            f"A new client has submitted a support ticket!\n\nClient Name:"
-            f" {ticket.client_name}\nClient Email: {ticket.client_email}\nProject"
-            f" Details / Message:\n{ticket.project_details}\n\nPlease contact"
-            " them back."
+            f"A new client has submitted a support ticket!\n\nClient Name: "
+            f"{ticket.client_name}\nClient Email: {ticket.client_email}\nProject "
+            f"Details / Message:\n{ticket.project_details}\n\nPlease contact them back."
         )
         msg.attach(MIMEText(body, "plain"))
 
@@ -196,10 +190,7 @@ def create_support_ticket(ticket: TicketInput):
 
         return {
             "status": "success",
-            "message": (
-                "Ticket successfully created and email notification sent to"
-                " Hammad!"
-            ),
+            "message": "Ticket successfully created and email notification sent to Hammad!",
         }
     except Exception as e:
         traceback.print_exc()
@@ -209,21 +200,19 @@ def create_support_ticket(ticket: TicketInput):
 @app.post("/submit-feedback")
 def submit_feedback(feedback: FeedbackInput):
     try:
-        sender_email = "hammadahmad736gb@gmail.com"
-        sender_password = "neeikfwoytrmvaag"
-        receiver_email = "hammadahmad736gb@gmail.com"
+        sender_email = os.environ.get("SENDER_EMAIL")
+        sender_password = os.environ.get("SENDER_PASSWORD")
+        receiver_email = os.environ.get("RECEIVER_EMAIL", sender_email)
 
         msg = MIMEMultipart()
         msg["From"] = sender_email
         msg["To"] = receiver_email
-        msg["Subject"] = (
-            f"⭐ New Client Feedback from {feedback.client_name} ({feedback.rating})"
-        )
+        msg["Subject"] = f"⭐ New Client Feedback from {feedback.client_name} ({feedback.rating})"
 
         body = (
-            f"You have received a new feedback submission!\n\nClient Name:"
-            f" {feedback.client_name}\nClient Email: {feedback.client_email}\nRating:"
-            f" {feedback.rating}\nFeedback Message:\n{feedback.feedback_message}"
+            f"You have received a new feedback submission!\n\nClient Name: "
+            f"{feedback.client_name}\nClient Email: {feedback.client_email}\nRating: "
+            f"{feedback.rating}\nFeedback Message:\n{feedback.feedback_message}"
         )
         msg.attach(MIMEText(body, "plain"))
 
@@ -244,5 +233,4 @@ def submit_feedback(feedback: FeedbackInput):
 
 if __name__ == "__main__":
     import uvicorn
-
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
