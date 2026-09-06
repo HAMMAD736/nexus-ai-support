@@ -21,9 +21,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Vercel ke liye /tmp path use karein kyunke root read-only hota hai
-db_path = "/tmp/chroma_db" if os.environ.get("VERCEL") else "./chroma_db"
-chroma_client = chromadb.PersistentClient(path=db_path)
+# Serverless ke liye In-Memory ChromaDB client use karein taake disk read-only ka masla hi na ho
+chroma_client = chromadb.EphemeralClient()
 collection = chroma_client.get_or_create_collection(
     name="support_knowledge_base"
 )
@@ -147,12 +146,14 @@ def chat_with_ai(query: ChatQuery):
 
         answer = chat_completion.choices[0].message.content
 
-        # Logging fixed for Vercel read-only filesystem using /tmp
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        log_entry = f"[{timestamp}] User: {query.question} | AI: {answer}\n"
-        log_path = "/tmp/chat_logs.txt" if os.environ.get("VERCEL") else "chat_logs.txt"
-        with open(log_path, "a", encoding="utf-8") as f:
-            f.write(log_entry + "-" * 50 + "\n")
+        # Safe logging (try-except block so it never crashes if filesystem blocks it)
+        try:
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            log_entry = f"[{timestamp}] User: {query.question} | AI: {answer}\n"
+            with open("/tmp/chat_logs.txt", "a", encoding="utf-8") as f:
+                f.write(log_entry + "-" * 50 + "\n")
+        except Exception:
+            pass
 
         return {
             "response": answer,
@@ -187,7 +188,7 @@ def create_support_ticket(ticket: TicketInput):
         server = smtplib.SMTP("smtp.gmail.com", 587)
         server.starttls()
         server.login(sender_email, sender_password)
-        server.sendmail(sender_email, receiver_email, msg.as_main_string() if hasattr(msg, 'as_main_string') else msg.as_string())
+        server.sendmail(sender_email, receiver_email, msg.as_string())
         server.quit()
 
         return {
