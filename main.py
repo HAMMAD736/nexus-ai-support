@@ -17,7 +17,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-chroma_client = chromadb.Client()
+# Purana line hata kar yeh lagayein:
+chroma_client = chromadb.EphemeralClient()
 collection = chroma_client.get_or_create_collection(name="nexus_knowledge")
 
 class ChatQuery(BaseModel):
