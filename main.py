@@ -1,4 +1,4 @@
-# Build Version: v7 - Auto Fallback Model Switcher
+# Build Version: v8 - Ultimate Multi-Model Fallback with UI Display
 import os
 os.environ["HOME"] = "/tmp"
 
@@ -47,8 +47,8 @@ def serve_frontend():
     <main class="max-w-6xl mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
         <section class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-[650px]">
             <div class="p-4 border-b border-gray-100 bg-gray-50 rounded-t-xl flex items-center justify-between">
-                <h2 class="font-semibold text-gray-700 flex items-center gap-2">💬 Live AI Assistant</h2>
-                <span class="text-xs text-gray-500">Ask about services, pricing, & timelines</span>
+                <h2 class="font-semibold text-gray-700 flex items-center gap-2">💬 Live AI Assistant (Auto-Fallback Loop)</h2>
+                <span class="text-xs text-gray-500">Displays active model on UI</span>
             </div>
             <div id="chat-box" class="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-50/50">
                 <div class="flex items-start">
@@ -58,7 +58,7 @@ def serve_frontend():
                 </div>
             </div>
             <div class="p-4 border-t border-gray-100 bg-white rounded-b-xl flex gap-2">
-                <input type="text" id="user-input" placeholder="Type your question here (e.g. services, pricing)..."
+                <input type="text" id="user-input" placeholder="Type your question here..."
                     class="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <button onclick="sendMessage()"
                     class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition duration-200 shadow-sm">Send</button>
@@ -75,7 +75,7 @@ def serve_frontend():
             inputField.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
             const loadingId = "loading-" + Date.now();
-            chatBox.innerHTML += `<div id="${loadingId}" class="flex items-start"><div class="bg-gray-200 text-gray-600 rounded-2xl rounded-tl-none px-4 py-3 text-sm italic">Thinking...</div></div>`;
+            chatBox.innerHTML += `<div id="${loadingId}" class="flex items-start"><div class="bg-gray-200 text-gray-600 rounded-2xl rounded-tl-none px-4 py-3 text-sm italic">Testing models via fallback loop...</div></div>`;
             chatBox.scrollTop = chatBox.scrollHeight;
             try {
                 const response = await fetch("/chat", {
@@ -86,8 +86,9 @@ def serve_frontend():
                 const data = await response.json();
                 document.getElementById(loadingId).remove();
                 const replyText = data.response || "No response received.";
+                const modelUsedTag = data.model_used ? `<div class="mt-2 text-[11px] text-indigo-600 font-mono border-t border-gray-100 pt-1">⚡ Successfully Executed Model: <b>${data.model_used}</b></div>` : '';
                 const parsedHtml = marked.parse(replyText);
-                chatBox.innerHTML += `<div class="flex items-start"><div class="bg-white border border-gray-200 text-gray-800 rounded-2xl rounded-tl-none px-4 py-3 max-w-[85%] text-sm shadow-sm leading-relaxed space-y-2">${parsedHtml}</div></div>`;
+                chatBox.innerHTML += `<div class="flex items-start"><div class="bg-white border border-gray-200 text-gray-800 rounded-2xl rounded-tl-none px-4 py-3 max-w-[85%] text-sm shadow-sm leading-relaxed space-y-2">${parsedHtml}${modelUsedTag}</div></div>`;
             } catch (error) {
                 document.getElementById(loadingId).remove();
                 chatBox.innerHTML += `<div class="flex items-start"><div class="bg-red-100 text-red-700 rounded-2xl rounded-tl-none px-4 py-3 text-sm">Error connecting to server.</div></div>`;
@@ -106,7 +107,7 @@ def serve_frontend():
 def chat_with_ai(query: ChatQuery):
     api_key = os.environ.get("GROQ_API_KEY")
     if not api_key:
-        return {"response": "❌ Error: GROQ_API_KEY is missing in Vercel environment variables."}
+        return {"response": "❌ Error: GROQ_API_KEY is missing in Vercel environment variables.", "model_used": None}
     
     client = Groq(api_key=api_key)
 
@@ -127,12 +128,14 @@ def chat_with_ai(query: ChatQuery):
         f"Knowledge Base Context:\n{knowledge_base}"
     )
 
-    # List of models to try one by one automatically
+    # All known Groq models in a single auto-fallback loop
     models_to_try = [
         "llama-3.3-70b-versatile",
         "llama-3.1-8b-instant",
-        "mixtral-8x7b-32768",
+        "llama-3.2-3b-preview",
+        "llama-3.2-1b-preview",
         "gemma2-9b-it",
+        "mixtral-8x7b-32768",
         "llama3-70b-8192"
     ]
 
@@ -149,9 +152,9 @@ def chat_with_ai(query: ChatQuery):
                 max_tokens=150,
             )
             answer = chat_completion.choices[0].message.content
-            return {"response": f"{answer}"}
+            return {"response": answer, "model_used": model_name}
         except Exception as e:
             last_error = str(e)
-            continue  # Agar aik model fail ho toh agle par chale jao
+            continue
 
-    return {"response": f"❌ All models failed. Last Error: {last_error}"}
+    return {"response": f"❌ All models failed. Last Error: {last_error}", "model_used": "None"}
