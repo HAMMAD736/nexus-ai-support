@@ -1,3 +1,4 @@
+# Updated build: Force fresh deployment cache clear
 import os
 os.environ["HOME"] = "/tmp"
 
@@ -128,7 +129,7 @@ def chat_with_ai(query: ChatQuery):
         )
 
         chat_completion = client.chat.completions.create(
-            model="llama3-70b-8192",
+            model="gemma2-9b-it",  # Completely different model to bypass cache
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": query.question},
