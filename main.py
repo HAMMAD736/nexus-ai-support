@@ -1,4 +1,4 @@
-# Build Version: v5 - Fresh Deployment Trigger
+# Build Version: v6 - Ultra-stable Mixtral Model
 import os
 os.environ["HOME"] = "/tmp"
 
@@ -129,7 +129,7 @@ def chat_with_ai(query: ChatQuery):
         )
 
         chat_completion = client.chat.completions.create(
-            model="deepseek-r1-distill-llama-70b",  # Active & powerful model
+            model="mixtral-8x7b-32768",  # Permanent stable model
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": query.question},
