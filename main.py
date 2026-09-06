@@ -147,9 +147,11 @@ def chat_with_ai(query: ChatQuery):
 
         answer = chat_completion.choices[0].message.content
 
+        # Logging fixed for Vercel read-only filesystem using /tmp
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         log_entry = f"[{timestamp}] User: {query.question} | AI: {answer}\n"
-        with open("chat_logs.txt", "a", encoding="utf-8") as f:
+        log_path = "/tmp/chat_logs.txt" if os.environ.get("VERCEL") else "chat_logs.txt"
+        with open(log_path, "a", encoding="utf-8") as f:
             f.write(log_entry + "-" * 50 + "\n")
 
         return {
@@ -185,7 +187,7 @@ def create_support_ticket(ticket: TicketInput):
         server = smtplib.SMTP("smtp.gmail.com", 587)
         server.starttls()
         server.login(sender_email, sender_password)
-        server.sendmail(sender_email, receiver_email, msg.as_string())
+        server.sendmail(sender_email, receiver_email, msg.as_main_string() if hasattr(msg, 'as_main_string') else msg.as_string())
         server.quit()
 
         return {
