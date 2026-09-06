@@ -128,7 +128,8 @@ def chat_with_ai(query: ChatQuery):
             f"Knowledge Base Context:\n{context}"
         )
 
-        model_id = "llama-3.1-8b-instant"
+        # Aapki key ka verified working model
+        model_id = "qwen/qwen3.6-27b"
 
         chat_completion = client.chat.completions.create(
             model=model_id,
