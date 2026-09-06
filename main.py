@@ -1,4 +1,4 @@
-# Build Version: v8 - Ultimate Multi-Model Fallback with UI Display
+# Build Version: v9 - Updated Latest Active Groq Models Loop
 import os
 os.environ["HOME"] = "/tmp"
 
@@ -47,8 +47,8 @@ def serve_frontend():
     <main class="max-w-6xl mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
         <section class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col h-[650px]">
             <div class="p-4 border-b border-gray-100 bg-gray-50 rounded-t-xl flex items-center justify-between">
-                <h2 class="font-semibold text-gray-700 flex items-center gap-2">💬 Live AI Assistant (Auto-Fallback Loop)</h2>
-                <span class="text-xs text-gray-500">Displays active model on UI</span>
+                <h2 class="font-semibold text-gray-700 flex items-center gap-2">💬 Live AI Assistant (Auto-Fallback Loop v9)</h2>
+                <span class="text-xs text-gray-500">Using latest active models</span>
             </div>
             <div id="chat-box" class="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-50/50">
                 <div class="flex items-start">
@@ -75,7 +75,7 @@ def serve_frontend():
             inputField.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
             const loadingId = "loading-" + Date.now();
-            chatBox.innerHTML += `<div id="${loadingId}" class="flex items-start"><div class="bg-gray-200 text-gray-600 rounded-2xl rounded-tl-none px-4 py-3 text-sm italic">Testing models via fallback loop...</div></div>`;
+            chatBox.innerHTML += `<div id="${loadingId}" class="flex items-start"><div class="bg-gray-200 text-gray-600 rounded-2xl rounded-tl-none px-4 py-3 text-sm italic">Testing active models via fallback loop...</div></div>`;
             chatBox.scrollTop = chatBox.scrollHeight;
             try {
                 const response = await fetch("/chat", {
@@ -128,15 +128,13 @@ def chat_with_ai(query: ChatQuery):
         f"Knowledge Base Context:\n{knowledge_base}"
     )
 
-    # All known Groq models in a single auto-fallback loop
+    # Latest active models verified for Groq in 2026
     models_to_try = [
         "llama-3.3-70b-versatile",
         "llama-3.1-8b-instant",
-        "llama-3.2-3b-preview",
-        "llama-3.2-1b-preview",
-        "gemma2-9b-it",
-        "mixtral-8x7b-32768",
-        "llama3-70b-8192"
+        "openai/gpt-oss-120b",
+        "qwen/qwen3-32b",
+        "gemma2-9b-it"
     ]
 
     last_error = ""
