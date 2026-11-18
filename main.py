@@ -407,7 +407,7 @@ New support ticket received on Nexus Automation Portal:
         server.sendmail(sender_email, receiver_email, msg.as_string())
         server.quit()
 
-        return {"status": "success", "message": f"🎫 Ticket successfully generated and emailed to Hammad!"}
+        return {"status": "success", "message": f"🎫 Ticket successfully generated. ✅ Your support request has been logged and routed to the Nexus Engineering Desk. A specialist will reach out to you via email soon."}
     
     except Exception as e:
         return {"status": "error", "message": f"❌ Error sending email: {str(e)}"}
